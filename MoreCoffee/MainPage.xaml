@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:MoreCoffee.Models"
+             xmlns:viewmodels="clr-namespace:MoreCoffee.ViewModels"
+             x:Class="MoreCoffee.MainPage"
+             x:DataType="viewmodels:MainPageViewModel">
+
+    <Grid RowDefinitions="*, Auto, Auto" Padding="10" RowSpacing="20">
+        <CollectionView ItemsSource="{Binding CoffeeGroups}"
+                       Grid.Row="0"
+                       IsGrouped="True">
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="viewmodels:CoffeeGroup">
+                    <Grid Padding="10" BackgroundColor="{StaticResource Primary}" Opacity="0.8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="{Binding DisplayDate}"
+                               TextColor="White"
+                               FontAttributes="Bold"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding TotalOunces, StringFormat='{0:N1}oz'}"
+                               TextColor="White"
+                               FontAttributes="Bold"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Coffee">
+                    <Grid Padding="10" ColumnDefinitions="*, Auto" ColumnSpacing="15">
+                        <Label Text="{Binding Name}" 
+                               VerticalOptions="Center"/>
+                        <Label Text="{Binding Ounces, StringFormat='{0}oz'}"
+                               Grid.Column="1"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            
+            <CollectionView.GroupFooterTemplate>
+                <DataTemplate>
+                    <BoxView HeightRequest="1" 
+                             BackgroundColor="{StaticResource Gray300}"
+                             Margin="0,0,0,10"/>
+                </DataTemplate>
+            </CollectionView.GroupFooterTemplate>
+        </CollectionView>
+
+        <Label Text="{Binding TotalOuncesText}"
+               Grid.Row="1"
+               HorizontalOptions="End"
+               FontSize="16"
+               FontAttributes="Bold"/>
+
+        <Grid Grid.Row="2" 
+              RowDefinitions="Auto,Auto" 
+              ColumnDefinitions="*,Auto,Auto" 
+              Padding="10"
+              RowSpacing="15"
+              ColumnSpacing="15">
+            <Entry Text="{Binding Name}"
+                   Placeholder="Coffee Name"
+                   Grid.Row="0"
+                   Grid.ColumnSpan="3"
+                   Margin="0,0,0,10"/>
+            
+            <Entry Text="{Binding Ounces}"
+                   Placeholder="Ounces"
+                   Keyboard="Numeric"
+                   Grid.Row="1"
+                   Grid.Column="0"/>
+            
+            <DatePicker Date="{Binding SelectedDate}"
+                       Grid.Row="1"
+                       Grid.Column="1"
+                       MinimumWidthRequest="125"/>
+            
+            <Button Text="Add Coffee"
+                    Command="{Binding AddCoffeeCommand}"
+                    Grid.Row="1"
+                    Grid.Column="2"/>
+        </Grid>
+    </Grid>
+
+</ContentPage>

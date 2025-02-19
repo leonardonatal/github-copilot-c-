@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:MoreCoffee.ViewModels"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
+             x:Class="MoreCoffee.Views.StatisticsPage"
+             x:DataType="viewmodels:StatisticsViewModel"
+             Title="Coffee Stats">
+    
+    <Grid RowDefinitions="Auto,Auto,*" 
+          RowSpacing="20"
+          Padding="20">
+        
+        <Label Text="Total Coffee Consumed (oz)"
+               HorizontalOptions="Center"
+               FontSize="24"/>
+        
+        <Label Text="{Binding TotalOuncesText}"
+               Grid.Row="1"
+               HorizontalOptions="Center"
+               FontSize="72"
+               FontAttributes="Bold"/>
+
+        <chart:SfCartesianChart Grid.Row="2"
+                               Margin="0,20">
+            <chart:SfCartesianChart.Title>
+                <Label Text="Last 7 Days Consumption"
+                       HorizontalOptions="Center"
+                       FontSize="16"
+                       FontAttributes="Bold"/>
+            </chart:SfCartesianChart.Title>
+
+            <chart:SfCartesianChart.XAxes>
+                <chart:CategoryAxis>
+                    <chart:CategoryAxis.Title>
+                        <chart:ChartAxisTitle Text="Date"/>
+                    </chart:CategoryAxis.Title>
+                </chart:CategoryAxis>
+            </chart:SfCartesianChart.XAxes>
+
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis>
+                    <chart:NumericalAxis.Title>
+                        <chart:ChartAxisTitle Text="Ounces"/>
+                    </chart:NumericalAxis.Title>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+
+            <chart:ColumnSeries ItemsSource="{Binding ChartData}"
+                               XBindingPath="DisplayDate"
+                               YBindingPath="Ounces"
+                               ShowDataLabels="True">
+                <chart:ColumnSeries.Fill>
+                    <SolidColorBrush Color="{StaticResource Primary}"/>
+                </chart:ColumnSeries.Fill>
+            </chart:ColumnSeries>
+        </chart:SfCartesianChart>
+    </Grid>
+
+</ContentPage>
