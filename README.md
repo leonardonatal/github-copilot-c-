@@ -2,6 +2,8 @@
 
 A .NET MAUI application to track daily coffee consumption with detailed statistics and visualizations.
 
+Built completely with VS Code and GitHub Copilot Agent mode: https://www.youtube.com/watch?v=pUK7MRzoTDc
+
 ## Features
 
 - Track coffee consumption with name and amount in ounces
