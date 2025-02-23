@@ -9,13 +9,36 @@ namespace MoreCoffee.ViewModels;
 public partial class EditCoffeeViewModel : ObservableObject
 {
     private readonly CoffeeService coffeeService;
+    private string originalName = string.Empty;
+    private double originalOunces;
+    private DateTime originalDateAdded;
     
     [ObservableProperty]
     Coffee? coffee;
 
+    partial void OnCoffeeChanged(Coffee? value)
+    {
+        if (value != null)
+        {
+            originalName = value.Name ?? string.Empty;
+            originalOunces = value.Ounces;
+            originalDateAdded = value.DateAdded;
+        }
+    }
+
     public EditCoffeeViewModel(CoffeeService coffeeService)
     {
         this.coffeeService = coffeeService;
+    }
+
+    private bool HasCoffeeChanged()
+    {
+        if (Coffee == null)
+            return false;
+
+        return !string.Equals(Coffee.Name ?? string.Empty, originalName) ||
+               Math.Abs(Coffee.Ounces - originalOunces) > 0.001 ||
+               Coffee.DateAdded != originalDateAdded;
     }
 
     [RelayCommand]
@@ -24,7 +47,16 @@ public partial class EditCoffeeViewModel : ObservableObject
         if (Coffee == null)
             return;
 
-        await coffeeService.UpdateCoffeeAsync(Coffee);
-        await Shell.Current.GoToAsync("..");
+        var hasCoffeeChanged = HasCoffeeChanged();
+        if (hasCoffeeChanged)
+        {
+            await coffeeService.UpdateCoffeeAsync(Coffee);
+        }
+
+        var parameters = new Dictionary<string, object>
+        {
+            { "IsEdited", hasCoffeeChanged }
+        };
+        await Shell.Current.GoToAsync("..", parameters, animate: true);
     }
 }
