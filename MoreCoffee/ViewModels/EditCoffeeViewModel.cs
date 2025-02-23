@@ -57,6 +57,6 @@ public partial class EditCoffeeViewModel : ObservableObject
         {
             { "IsEdited", hasCoffeeChanged }
         };
-        await Shell.Current.GoToAsync("..", parameters, animate: true);
+        await Shell.Current.GoToAsync("..", true, parameters);
     }
 }
