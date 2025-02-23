@@ -14,12 +14,22 @@ public class CoffeeService
     }
 
     bool isInitialized;
+    SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+
     public async Task InitializeAsync()
     {
-        if (!isInitialized)
+        await semaphoreSlim.WaitAsync();
+        try
         {
-            await Init();
-            isInitialized = true;
+            if (!isInitialized)
+            {
+                await Init();
+                isInitialized = true;
+            }
+        }
+        finally
+        {
+            semaphoreSlim.Release();
         }
     }
     async Task Init()

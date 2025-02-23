@@ -1,7 +1,7 @@
 namespace MoreCoffee.ViewModels;
 
-public interface INavigationAware
+public interface INavigationAwareAsync
 {
-    void OnNavigatedTo();
-    void OnNavigatedFrom();
+    Task OnNavigatedToAsync();
+    Task OnNavigatedFromAsync();
 }
