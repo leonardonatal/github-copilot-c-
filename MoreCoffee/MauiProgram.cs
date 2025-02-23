@@ -26,10 +26,12 @@ public static class MauiProgram
         // ViewModels
         builder.Services.AddSingleton<MainPageViewModel>();
         builder.Services.AddSingleton<StatisticsViewModel>();
+        builder.Services.AddTransient<EditCoffeeViewModel>();
         
         // Pages
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<StatisticsPage>();
+        builder.Services.AddTransient<EditCoffeePage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

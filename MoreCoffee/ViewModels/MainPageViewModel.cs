@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace MoreCoffee.ViewModels;
 
-public partial class MainPageViewModel : ObservableObject
+public partial class MainPageViewModel : ObservableObject, INavigationAware
 {
     private readonly CoffeeService _coffeeService;
 
@@ -81,6 +81,28 @@ public partial class MainPageViewModel : ObservableObject
 
         // Reload the list
         await LoadCoffeesAsync();
+    }
+
+    [RelayCommand]
+    async Task EditCoffee(Coffee coffee)
+    {
+        if (coffee == null)
+            return;
+
+        var navigationParameter = new Dictionary<string, object>
+        {
+            { "Coffee", coffee }
+        };
+        await Shell.Current.GoToAsync("EditCoffeePage", navigationParameter);
+    }
+
+    public async void OnNavigatedTo()
+    {
+        await LoadCoffeesAsync();
+    }
+
+    public void OnNavigatedFrom()
+    {
     }
 }
 
