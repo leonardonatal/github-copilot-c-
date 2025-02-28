@@ -36,7 +36,7 @@
                             <SwipeView.RightItems>
                                 <SwipeItems>
                                     <SwipeItem Text="Delete"
-                                              Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BagOfCoffeeViewModel}}, Path=DeleteCoffeeBagCommand}"
+                                              Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BagOfCoffeeViewModel}}, x:DataType=viewmodel:BagOfCoffeeViewModel, Path=DeleteCoffeeBagCommand}"
                                               CommandParameter="{Binding}"
                                               BackgroundColor="Red"/>
                                 </SwipeItems>

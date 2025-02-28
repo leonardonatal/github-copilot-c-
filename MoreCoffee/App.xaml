@@ -11,8 +11,8 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <converters:EnumToListConverter x:Key="EnumToList"/>
-            <converters:StringNotNullOrEmptyConverter x:Key="StringNotNullOrEmptyConverter"/>
+            <!--<converters:EnumToListConverter x:Key="EnumToList"/>-->
+            <!--<converters:StringNotNullOrEmptyConverter x:Key="StringNotNullOrEmptyConverter"/>-->
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -43,15 +43,16 @@ public partial class MainPageViewModel : ObservableObject, INavigationAwareAsync
         var groups = coffeeList
             .GroupBy(c => c.DateAdded.Date)
             .OrderByDescending(g => g.Key)
-            .Select(g => new CoffeeGroup(g.Key, new ObservableCollection<Coffee>(g)))
+            .Select(g => new CoffeeGroup(g.Key, [.. g]))
             .ToList();
 
-        CoffeeGroups.Clear();
-        foreach (var group in groups)
-            CoffeeGroups.Add(group);
 
-        var totalOunces = coffeeList.Sum(c => c.Ounces);
-        TotalOuncesText = $"Total Coffee Consumed: {totalOunces}oz";
+        CoffeeGroups = [.. groups];
+        OnPropertyChanged(nameof(CoffeeGroups));
+
+		var totalOunces = coffeeList.Sum(c => c.Ounces);
+		TotalOuncesText = $"Total Coffee Consumed: {totalOunces}oz";
+
     }
 
     [RelayCommand]
@@ -95,6 +96,7 @@ public partial class MainPageViewModel : ObservableObject, INavigationAwareAsync
         };
         await Shell.Current.GoToAsync("EditCoffeePage", parameters);
     }
+
 
     public async Task OnNavigatedToAsync()
     {
