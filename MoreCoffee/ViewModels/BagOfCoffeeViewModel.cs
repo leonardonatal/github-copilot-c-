@@ -62,7 +62,7 @@ public partial class BagOfCoffeeViewModel : ObservableObject, INavigationAwareAs
             Roaster = Roaster,
             Origin = Origin,
             RoastDate = RoastDate,
-            RoastLevel = Enum.Parse<RoastLevel>(SelectedRoastLevel),
+            RoastLevel = Enum.TryParse<RoastLevel>(SelectedRoastLevel, out var parsedRoastLevel) ? parsedRoastLevel : RoastLevel.Medium,
             TastingNotes = TastingNotes
         };
 
