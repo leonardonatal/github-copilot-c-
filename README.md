@@ -65,3 +65,21 @@ Built completely with VS Code and GitHub Copilot Agent mode: https://www.youtube
 - Android API 21+
 - macOS 15.0+ (via Mac Catalyst)
 - Windows 10.0.17763.0+
+
+
+## Data Types
+
+```mermaid
+erDiagram
+    BAG_OF_COFFEE {
+        int Id PK
+        string Roaster
+        DateTime RoastDate
+        string Name
+        RoastLevel RoastLevel
+        string Origin
+        DateTime DateAdded
+        string TastingNotes
+    }
+
+```
