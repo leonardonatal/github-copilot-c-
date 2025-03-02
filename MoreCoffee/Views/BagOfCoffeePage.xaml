@@ -8,25 +8,9 @@
              Title="Coffee Bags">
     <ScrollView>
         <VerticalStackLayout Spacing="10" Padding="20">
-            <Border Padding="10" StrokeShape="RoundRectangle 10">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Add New Coffee Bag" FontSize="Large"/>
-                    <Entry Text="{Binding Roaster}" Placeholder="Roaster"/>
-                    <Entry Text="{Binding Name}" Placeholder="Coffee Name"/>
-                    <Entry Text="{Binding Origin}" Placeholder="Origin"/>
-                    <Editor Text="{Binding TastingNotes}" 
-                            Placeholder="Tasting Notes"
-                            AutoSize="TextChanges"
-                            MaxLength="500"/>
-                    <Label Text="Roast Date"/>
-                    <DatePicker Date="{Binding RoastDate}"/>
-                    <Label Text="Roast Level"/>
-                    <Picker SelectedItem="{Binding SelectedRoastLevel}"
-                            ItemsSource="{Binding RoastLevels}"/>
-                    <Button Text="Add Coffee Bag" 
-                            Command="{Binding AddCoffeeBagCommand}"/>
-                </VerticalStackLayout>
-            </Border>
+            <Button Text="Add New Bag" 
+                    Command="{Binding NavigateToAddBagCommand}"
+                    HorizontalOptions="End"/>
 
             <Label Text="Your Coffee Collection" FontSize="Large"/>
             <CollectionView ItemsSource="{Binding CoffeeBags}">

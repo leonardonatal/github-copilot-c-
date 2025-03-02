@@ -29,12 +29,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<StatisticsViewModel>();
         builder.Services.AddTransient<EditCoffeeViewModel>();
         builder.Services.AddSingleton<BagOfCoffeeViewModel>();
+        builder.Services.AddTransient<AddCoffeeBagViewModel>();  // Add this line
         
         // Pages
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<StatisticsPage>();
         builder.Services.AddTransient<EditCoffeePage>();
         builder.Services.AddSingleton<BagOfCoffeePage>();
+        builder.Services.AddTransient<AddCoffeeBagPage>();  // Add this line
 
 #if DEBUG
         builder.Logging.AddDebug();
