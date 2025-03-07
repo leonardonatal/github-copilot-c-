@@ -62,11 +62,6 @@ public class CoffeeService
     {
         if (!isInitialized)
             await InitializeAsync();
-
-        var existingCoffee = await Database.Table<Coffee>().Where(c => c.Id == coffee.Id).FirstOrDefaultAsync();
-        if (existingCoffee == null)
-            return 0;
-
         return await Database.DeleteAsync(coffee);
     }
 }

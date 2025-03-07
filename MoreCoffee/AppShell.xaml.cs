@@ -1,4 +1,6 @@
-﻿namespace MoreCoffee;
+﻿using MoreCoffee.Views;
+
+namespace MoreCoffee;
 
 public partial class AppShell : Shell
 {
@@ -7,5 +9,6 @@ public partial class AppShell : Shell
         InitializeComponent();
         
         Routing.RegisterRoute("EditCoffeePage", typeof(Views.EditCoffeePage));
+        Routing.RegisterRoute(nameof(AddCoffeeBagPage), typeof(AddCoffeeBagPage));
     }
 }

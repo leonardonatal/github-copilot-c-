@@ -15,6 +15,9 @@ public partial class StatisticsViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<CoffeeDayData> chartData;
 
+    [ObservableProperty]
+    private ObservableCollection<CoffeeDayData> chartData2;
+
     public StatisticsViewModel(CoffeeService coffeeService)
     {
         _coffeeService = coffeeService;
@@ -42,6 +45,16 @@ public partial class StatisticsViewModel : ObservableObject
         ChartData.Clear();
         foreach (var data in groupedCoffees.TakeLast(7)) // Show last 7 days
             ChartData.Add(data);
+        ChartData2.Clear();
+        //group the coffees by name for chartdata2
+        var groupedCoffeesByName = coffees
+            .GroupBy(c => c.Name)
+            .OrderBy(g => g.Key)
+            .Select(g => new CoffeeDayData(DateTime.Today, g.Sum(c => c.Ounces)))
+            .ToList();
+        foreach (var data in groupedCoffeesByName)
+            ChartData2.Add(data);
+
     }
 }
 

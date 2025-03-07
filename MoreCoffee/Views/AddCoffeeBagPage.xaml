@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoreCoffee.Views.AddCoffeeBagPage"
+             xmlns:viewmodel="clr-namespace:MoreCoffee.ViewModels"
+             x:DataType="viewmodel:AddCoffeeBagViewModel"
+             Title="Add New Coffee Bag">
+    <ScrollView>
+        <VerticalStackLayout Spacing="10" Padding="20">
+            <Border Padding="10" StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="10">
+                    <Entry Text="{Binding Roaster}" Placeholder="Roaster"/>
+                    <Entry Text="{Binding Name}" Placeholder="Coffee Name"/>
+                    <Entry Text="{Binding Origin}" Placeholder="Origin"/>
+                    <Editor Text="{Binding TastingNotes}" 
+                            Placeholder="Tasting Notes"
+                            AutoSize="TextChanges"
+                            MaxLength="500"/>
+                    <Label Text="Roast Date"/>
+                    <DatePicker Date="{Binding RoastDate}"/>
+                    <Label Text="Roast Level"/>
+                    <Picker SelectedItem="{Binding SelectedRoastLevel}"
+                            ItemsSource="{Binding RoastLevels}"/>
+                    <Button Text="Save Coffee Bag" 
+                            Command="{Binding SaveCoffeeBagCommand}"/>
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
