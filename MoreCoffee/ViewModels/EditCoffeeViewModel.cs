@@ -48,11 +48,7 @@ public partial class EditCoffeeViewModel : ObservableObject
             return;
 
         if (Coffee.Ounces <= 0)
-        {
-            // Notify the user about the invalid input
-            await Application.Current.MainPage.DisplayAlert("Validation Error", "Ounces must be greater than zero.", "OK");
-            return;
-        }
+            throw new ArgumentException("Ounces must be greater than zero.");
 
         var hasCoffeeChanged = HasCoffeeChanged();
         if (hasCoffeeChanged)
@@ -65,28 +61,5 @@ public partial class EditCoffeeViewModel : ObservableObject
             { "IsEdited", hasCoffeeChanged }
         };
         await Shell.Current.GoToAsync("..", true, parameters);
-    }
-
-    [RelayCommand]
-    async Task DeleteCoffee()
-    {
-        if (Coffee == null)
-            return;
-
-        bool answer = await Application.Current.MainPage.DisplayAlert(
-            "Delete Coffee",
-            $"Are you sure you want to delete {Coffee.Name}?",
-            "Yes", "No");
-
-        if (answer)
-        {
-            await coffeeService.DeleteCoffeeAsync(Coffee);
-            
-            var parameters = new Dictionary<string, object>
-            {
-                { "IsDeleted", true }
-            };
-            await Shell.Current.GoToAsync("..", true, parameters);
-        }
     }
 }

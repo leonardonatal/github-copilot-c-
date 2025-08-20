@@ -57,11 +57,4 @@ public class CoffeeService
             await InitializeAsync();
         return await Database.UpdateAsync(coffee);
     }
-
-    public async Task<int> DeleteCoffeeAsync(Coffee coffee)
-    {
-        if (!isInitialized)
-            await InitializeAsync();
-        return await Database.DeleteAsync(coffee);
-    }
 }
