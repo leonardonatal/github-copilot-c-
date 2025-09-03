@@ -10,6 +10,7 @@ namespace MoreCoffee.ViewModels;
 public partial class MainPageViewModel : ObservableObject, INavigationAwareAsync
 {
     private readonly CoffeeService _coffeeService;
+    private readonly BagOfCoffeeService _bagOfCoffeeService;
 
     [ObservableProperty]
     private ObservableCollection<CoffeeGroup> coffeeGroups;
@@ -25,14 +26,25 @@ public partial class MainPageViewModel : ObservableObject, INavigationAwareAsync
 
     [ObservableProperty]
     private DateTime selectedDate = DateTime.Today;
+    
+    [ObservableProperty]
+    private BagOfCoffee? selectedBag;
+    
+    [ObservableProperty]
+    private ObservableCollection<BagOfCoffee> availableBags;
 
     [ObservableProperty]
     private bool isEdited;
+    
+    [ObservableProperty]
+    private bool isUsingBag;
 
-    public MainPageViewModel(CoffeeService coffeeService)
+    public MainPageViewModel(CoffeeService coffeeService, BagOfCoffeeService bagOfCoffeeService)
     {
         _coffeeService = coffeeService;
+        _bagOfCoffeeService = bagOfCoffeeService;
         CoffeeGroups = new ObservableCollection<CoffeeGroup>();
+        AvailableBags = new ObservableCollection<BagOfCoffee>();
     }
 
     private async Task LoadCoffeesAsync()
@@ -46,13 +58,27 @@ public partial class MainPageViewModel : ObservableObject, INavigationAwareAsync
             .Select(g => new CoffeeGroup(g.Key, [.. g]))
             .ToList();
 
-
         CoffeeGroups = [.. groups];
         OnPropertyChanged(nameof(CoffeeGroups));
 
-		var totalOunces = coffeeList.Sum(c => c.Ounces);
-		TotalOuncesText = $"Total Coffee Consumed: {totalOunces}oz";
-
+        var totalOunces = coffeeList.Sum(c => c.Ounces);
+        TotalOuncesText = $"Total Coffee Consumed: {totalOunces}oz";
+    }
+    
+    private async Task LoadAvailableBagsAsync()
+    {
+        var bags = await _bagOfCoffeeService.GetAvailableBagsOfCoffeeAsync();
+        AvailableBags.Clear();
+        foreach (var bag in bags)
+        {
+            AvailableBags.Add(bag);
+        }
+        
+        // Auto-select first bag if there are any available
+        if (AvailableBags.Count > 0 && SelectedBag == null)
+        {
+            SelectedBag = AvailableBags[0];
+        }
     }
 
     [RelayCommand]
@@ -69,22 +95,47 @@ public partial class MainPageViewModel : ObservableObject, INavigationAwareAsync
             await Shell.Current.DisplayAlert("Error", "Please enter a valid number for ounces", "OK");
             return;
         }
+        
+        // Check if using a bag and validate
+        if (IsUsingBag && SelectedBag == null)
+        {
+            await Shell.Current.DisplayAlert("Error", "Please select a coffee bag", "OK");
+            return;
+        }
+        
+        // Check if there's enough coffee in the bag
+        if (IsUsingBag && SelectedBag != null && SelectedBag.RemainingOunces < ouncesValue)
+        {
+            await Shell.Current.DisplayAlert("Error", 
+                $"Not enough coffee in the selected bag. Only {SelectedBag.RemainingOunces:F1}oz remaining.", "OK");
+            return;
+        }
 
         var coffee = new Coffee
         {
             Name = Name,
             Ounces = ouncesValue,
-            DateAdded = SelectedDate
+            DateAdded = SelectedDate,
+            BagOfCoffeeId = IsUsingBag && SelectedBag != null ? SelectedBag.Id : 0,
+            BagName = IsUsingBag && SelectedBag != null ? $"{SelectedBag.Roaster} - {SelectedBag.Name}" : null
         };
 
-        await _coffeeService.AddCoffeeAsync(coffee);
-        
-        // Clear the entries
-        Name = string.Empty;
-        Ounces = string.Empty;
+        try
+        {
+            await _coffeeService.AddCoffeeAsync(coffee);
+            
+            // Clear the entries
+            Name = string.Empty;
+            Ounces = string.Empty;
 
-        // Reload the list
-        await LoadCoffeesAsync();
+            // Reload the lists
+            await LoadCoffeesAsync();
+            await LoadAvailableBagsAsync();
+        }
+        catch (InvalidOperationException ex)
+        {
+            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+        }
     }
 
     [RelayCommand]
@@ -96,7 +147,12 @@ public partial class MainPageViewModel : ObservableObject, INavigationAwareAsync
         };
         await Shell.Current.GoToAsync("EditCoffeePage", parameters);
     }
-
+    
+    [RelayCommand]
+    async Task NavigateToBags()
+    {
+        await Shell.Current.GoToAsync("BagOfCoffeePage");
+    }
 
     public async Task OnNavigatedToAsync()
     {
@@ -107,6 +163,9 @@ public partial class MainPageViewModel : ObservableObject, INavigationAwareAsync
             await LoadCoffeesAsync();
             IsEdited = false;
         }
+        
+        // Always refresh available bags
+        await LoadAvailableBagsAsync();
     }
 
     public Task OnNavigatedFromAsync()

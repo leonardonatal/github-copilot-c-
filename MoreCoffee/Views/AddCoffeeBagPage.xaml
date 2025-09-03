@@ -12,6 +12,16 @@
                     <Entry Text="{Binding Roaster}" Placeholder="Roaster"/>
                     <Entry Text="{Binding Name}" Placeholder="Coffee Name"/>
                     <Entry Text="{Binding Origin}" Placeholder="Origin"/>
+                    
+                    <!-- Add Total Ounces field with validation -->
+                    <Label Text="Bag Size (ounces)"/>
+                    <Entry Text="{Binding TotalOunces}" 
+                           Placeholder="Total Ounces" 
+                           Keyboard="Numeric"/>
+                    <Label Text="{Binding TotalOuncesErrorMessage}" 
+                           TextColor="Red" 
+                           IsVisible="{Binding HasTotalOuncesError}"/>
+                    
                     <Editor Text="{Binding TastingNotes}" 
                             Placeholder="Tasting Notes"
                             AutoSize="TextChanges"

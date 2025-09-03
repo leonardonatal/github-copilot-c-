@@ -36,8 +36,15 @@
                                 Command="{Binding Path=EditCoffeeCommand, x:DataType=viewmodels:MainPageViewModel, Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}}"
                                 CommandParameter="{Binding .}"/>
                         </Grid.GestureRecognizers>
-                        <Label Text="{Binding Name}" 
-                               VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="{Binding Name}" 
+                                   VerticalOptions="Center"/>
+                            <Label Text="{Binding BagName}" 
+                                   FontSize="Small"
+                                   TextColor="Gray"
+                                   IsVisible="{Binding BagName, Converter={StaticResource StringIsNotNullOrEmptyConverter}}"
+                                   VerticalOptions="Center"/>
+                        </VerticalStackLayout>
                         <Label Text="{Binding Ounces, StringFormat='{0}oz'}"
                                Grid.Column="1"
                                VerticalOptions="Center"/>
@@ -60,40 +67,57 @@
             </CollectionView.GroupFooterTemplate>
         </CollectionView>
 
-        <Label Text="{Binding TotalOuncesText}"
-               Grid.Row="1"
-               HorizontalOptions="End"
-               FontSize="16"
-               FontAttributes="Bold"/>
-
-        <Grid Grid.Row="2" 
-              RowDefinitions="Auto,Auto" 
-              ColumnDefinitions="*,Auto,Auto" 
-              Padding="10"
-              RowSpacing="15"
-              ColumnSpacing="15">
-            <Entry Text="{Binding Name}"
-                   Placeholder="Coffee Name"
-                   Grid.Row="0"
-                   Grid.ColumnSpan="3"
-                   Margin="0,0,0,10"/>
-            
-            <Entry Text="{Binding Ounces}"
-                   Placeholder="Ounces"
-                   Keyboard="Numeric"
-                   Grid.Row="1"
-                   Grid.Column="0"/>
-            
-            <DatePicker Date="{Binding SelectedDate}"
-                       Grid.Row="1"
-                       Grid.Column="1"
-                       MinimumWidthRequest="125"/>
-            
-            <Button Text="Add Coffee"
-                    Command="{Binding AddCoffeeCommand}"
-                    Grid.Row="1"
-                    Grid.Column="2"/>
+        <Grid Grid.Row="1" ColumnDefinitions="*, Auto">
+            <Label Text="{Binding TotalOuncesText}"
+                  Grid.Column="0"
+                  HorizontalOptions="End"
+                  FontSize="16"
+                  FontAttributes="Bold"/>
+                  
+            <Button Text="Manage Bags"
+                    Command="{Binding NavigateToBagsCommand}"
+                    Grid.Column="1"
+                    Margin="10,0,0,0"/>
         </Grid>
+
+        <Border Grid.Row="2" Stroke="{StaticResource Primary}" StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="10">
+            <Grid RowDefinitions="Auto,Auto,Auto" 
+                  ColumnDefinitions="*,Auto,Auto" 
+                  RowSpacing="15"
+                  ColumnSpacing="15">
+                <Entry Text="{Binding Name}"
+                       Placeholder="Coffee Name"
+                       Grid.Row="0"
+                       Grid.ColumnSpan="3"
+                       Margin="0,0,0,10"/>
+                
+                <VerticalStackLayout Grid.Row="1" Grid.ColumnSpan="3" Spacing="5">
+                    <CheckBox IsChecked="{Binding IsUsingBag}" />
+                    <Label Text="Use Coffee from a Bag" VerticalOptions="Center" />
+                    <Picker ItemsSource="{Binding AvailableBags}"
+                            ItemDisplayBinding="{Binding DisplayName}"
+                            SelectedItem="{Binding SelectedBag}"
+                            IsEnabled="{Binding IsUsingBag}"
+                            IsVisible="{Binding IsUsingBag}"/>
+                </VerticalStackLayout>
+                
+                <Entry Text="{Binding Ounces}"
+                       Placeholder="Ounces"
+                       Keyboard="Numeric"
+                       Grid.Row="2"
+                       Grid.Column="0"/>
+                
+                <DatePicker Date="{Binding SelectedDate}"
+                           Grid.Row="2"
+                           Grid.Column="1"
+                           MinimumWidthRequest="125"/>
+                
+                <Button Text="Add Coffee"
+                        Command="{Binding AddCoffeeCommand}"
+                        Grid.Row="2"
+                        Grid.Column="2"/>
+            </Grid>
+        </Border>
     </Grid>
 
 </ContentPage>

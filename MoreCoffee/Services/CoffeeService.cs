@@ -6,11 +6,13 @@ namespace MoreCoffee.Services;
 public class CoffeeService
 {
     SQLiteAsyncConnection Database;
+    private readonly BagOfCoffeeService _bagOfCoffeeService;
 
-    public CoffeeService()
+    public CoffeeService(BagOfCoffeeService bagOfCoffeeService)
     {
         var databasePath = Path.Combine(FileSystem.AppDataDirectory, "coffee.db");
         Database = new SQLiteAsyncConnection(databasePath);
+        _bagOfCoffeeService = bagOfCoffeeService;
     }
 
     bool isInitialized;
@@ -48,6 +50,17 @@ public class CoffeeService
     {
         if (!isInitialized)
             await InitializeAsync();
+            
+        // If this coffee is from a bag, update the bag's remaining ounces
+        if (coffee.BagOfCoffeeId > 0)
+        {
+            var success = await _bagOfCoffeeService.ConsumeCoffeeFromBagAsync(coffee.BagOfCoffeeId, coffee.Ounces);
+            if (!success)
+            {
+                throw new InvalidOperationException("Not enough coffee in the selected bag");
+            }
+        }
+        
         return await Database.InsertAsync(coffee);
     }
 

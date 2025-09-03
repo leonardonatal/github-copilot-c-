@@ -11,8 +11,11 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <!--<converters:EnumToListConverter x:Key="EnumToList"/>-->
-            <!--<converters:StringNotNullOrEmptyConverter x:Key="StringNotNullOrEmptyConverter"/>-->
+            <!-- Converters -->
+            <converters:StringIsNotNullOrEmptyConverter x:Key="StringIsNotNullOrEmptyConverter"/>
+            <converters:RemainingQuantityColorConverter x:Key="RemainingQuantityColorConverter"/>
+            <converters:PercentToDecimalConverter x:Key="PercentToDecimalConverter"/>
+            <converters:StringNotNullOrEmptyConverter x:Key="StringNotNullOrEmptyConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
