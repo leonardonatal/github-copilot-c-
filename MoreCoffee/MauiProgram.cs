@@ -3,6 +3,7 @@ using MoreCoffee.Services;
 using MoreCoffee.ViewModels;
 using MoreCoffee.Views;
 using Syncfusion.Maui.Core.Hosting;
+using CommunityToolkit.Maui;
 
 namespace MoreCoffee;
 
@@ -14,6 +15,7 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .ConfigureSyncfusionCore()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
