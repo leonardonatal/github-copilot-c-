@@ -55,6 +55,70 @@ To build and run this application, you'll need:
    - Select your target platform (Windows or macOS)
    - Press F5 to build and run the application
 
+## Unit Testing
+
+This project follows comprehensive testing practices using xUnit and follows our custom testing guidelines defined in [.github/copilot-xunit-testing-instructions.md](.github/copilot-xunit-testing-instructions.md).
+
+### Testing Philosophy
+
+We create comprehensive, maintainable, and reliable unit tests that follow the Arrange-Act-Assert (AAA) pattern and support the Coffee Tracker app's MVVM architecture and async database operations.
+
+### Running Tests
+
+**Using Visual Studio:**
+- Open Test Explorer (Test > Test Explorer)
+- Build the solution
+- Click "Run All Tests"
+
+**Using Command Line:**
+```bash
+# Run all tests
+dotnet test MoreCoffee.Tests
+
+# Run tests with verbose output
+dotnet test MoreCoffee.Tests --logger "console;verbosity=detailed"
+
+# Run specific test class
+dotnet test --filter "ClassName=SimpleCoffeeTests"
+```
+
+### Test Project Structure
+
+The `MoreCoffee.Tests` project contains:
+- **SimpleCoffeeTests.cs** - Basic database operation tests for Coffee model
+- **Service Tests** - Comprehensive tests for service layer functionality
+- **Mock implementations** - Test-specific versions of services for isolation
+
+### Creating New Tests
+
+When adding new tests, follow the guidelines in our [xUnit Testing Instructions](.github/copilot-xunit-testing-instructions.md):
+
+1. **Use the AAA Pattern**: Arrange-Act-Assert structure
+2. **Meaningful Names**: `MethodName_Scenario_ExpectedResult`
+3. **FluentAssertions**: Use readable assertions like `.Should().Be()`
+4. **Test Isolation**: Each test uses its own temporary database
+5. **Proper Cleanup**: Implement `IDisposable` for resource cleanup
+
+### Example Test Structure
+
+```csharp
+[Fact]
+public async Task AddCoffeeAsync_WithValidCoffee_ShouldReturnPositiveId()
+{
+    // Arrange - Set up test data and dependencies
+    await _database.CreateTableAsync<Coffee>();
+    var coffee = new Coffee { Name = "Test Coffee", Ounces = 8.0 };
+    
+    // Act - Execute the method being tested
+    var result = await _database.InsertAsync(coffee);
+    
+    // Assert - Verify the expected outcome
+    result.Should().BeGreaterThan(0);
+}
+```
+
+For detailed testing guidelines and patterns specific to this project, refer to our [comprehensive xUnit testing instructions](.github/copilot-xunit-testing-instructions.md).
+
 ## Demo Presentation Guide
 
 ### Setup for Demo
