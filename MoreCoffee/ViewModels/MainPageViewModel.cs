@@ -64,7 +64,13 @@ public partial class MainPageViewModel : ObservableObject, INavigationAwareAsync
         var totalOunces = coffeeList.Sum(c => c.Ounces);
         TotalOuncesText = $"Total Coffee Consumed: {totalOunces}oz";
     }
-    
+
+    private async Task InitializeServicesAsync()
+    {
+        await _coffeeService.InitializeAsync();
+        await _bagOfCoffeeService.InitializeAsync();
+    }   
+
     private async Task LoadAvailableBagsAsync()
     {
         var bags = await _bagOfCoffeeService.GetAvailableBagsOfCoffeeAsync();
